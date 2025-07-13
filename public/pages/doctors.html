@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleHealth - Find Doctors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+        <link href="/css/doctors.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span class="logo-text">TeleHealth</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/vault"><i class="fas fa-lock"></i> Vault</a>
+                <a href="/appointments"><i class="fas fa-calendar-check"></i> Appointments</a>
+                <a href="/doctors" class="active"><i class="fas fa-user-md"></i> Doctors</a>
+                <a href="/profile" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i>Profile</a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <div class="mobile-controls">
+                <button class="theme-toggle" id="mobileThemeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="vault"><i class="fas fa-lock"></i> Vault</a>
+        <a href="/appointments"><i class="fas fa-calendar-check"></i> Appointments</a>
+        <a href="/doctors" class="active"><i class="fas fa-user-md"></i> Doctors</a>
+        <a href="/profile" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i>Profile</a>
+    </div>
+
+    <!-- Doctors Hero Section -->
+    <section class="doctors-hero">
+        <h1>Find the Right Specialist</h1>
+        <p>Search from our network of experienced healthcare professionals for your specific needs</p>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by doctor name or specialty...">
+            <button id="searchButton"><i class="fas fa-search"></i></button>
+        </div>
+    </section>
+
+    <!-- Doctors Container -->
+    <section class="doctors-container">
+        <div class="doctors-grid" id="doctorsGrid">
+            <!-- Doctors will be loaded here -->
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination controls will be loaded here -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span class="logo-text">TeleHealth</span>
+                </div>
+                <p>Providing accessible and quality healthcare services through innovative telehealth solutions for
+                    patients worldwide.</p>
+            </div>
+
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Doctors</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Appointments</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Our Services</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Video Consultations</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Remote Monitoring</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> E-Prescriptions</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Health Records</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Mental Health</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Healthcare St, MedCity</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> support@telehealth.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2023 TeleHealth. All rights reserved.
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or respect OS preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (savedTheme) {
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = theme === 'dark' ? 'fa-sun' : 'fa-moon';
+            themeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
+            mobileThemeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        mobileThemeToggle.addEventListener('click', toggleTheme);
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mobileMenu.classList.contains('active') &&
+                !mobileMenu.contains(e.target) &&
+                e.target !== mobileMenuBtn) {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Doctor Data
+        const categories = [
+            {
+                id: "primary-care",
+                title: "Primary Care Specialties",
+                fields: [
+                    "General Physician / Internal Medicine",
+                    "Family Medicine",
+                    "Pediatrics – Child health",
+                    "Geriatrics – Elderly care"
+                ]
+            },
+            {
+                id: "surgical",
+                title: "Surgical Specialties",
+                fields: [
+                    "General Surgery",
+                    "Cardiothoracic Surgery – Heart and lung surgery",
+                    "Neurosurgery – Brain and spine surgery",
+                    "Orthopedic Surgery – Bones, joints, ligaments",
+                    "Plastic Surgery – Cosmetic and reconstructive",
+                    "Ophthalmic Surgery – Eye surgeries",
+                    "ENT Surgery (Otolaryngology) – Ear, nose, and throat",
+                    "Urology – Urinary tract and male reproductive",
+                    "Vascular Surgery – Blood vessels",
+                    "Colorectal Surgery – Colon, rectum, anus",
+                    "Transplant Surgery",
+                    "Bariatric Surgery – Weight loss surgery",
+                    "Oral and Maxillofacial Surgery"
+                ]
+            },
+            {
+                id: "medical",
+                title: "Medical Specialties",
+                fields: [
+                    "Cardiology – Heart",
+                    "Pulmonology – Lungs and respiratory",
+                    "Nephrology – Kidneys",
+                    "Endocrinology – Hormonal disorders (e.g., diabetes, thyroid)",
+                    "Gastroenterology – Digestive system",
+                    "Rheumatology – Joints and autoimmune diseases",
+                    "Hematology – Blood diseases",
+                    "Oncology – Cancer",
+                    "Dermatology – Skin",
+                    "Allergy and Immunology",
+                    "Infectious Diseases",
+                    "Neurology – Brain and nervous system",
+                    "Psychiatry – Mental health",
+                    "Genetics / Medical Genetics"
+                ]
+            },
+            {
+                id: "obgyn",
+                title: "Obstetrics and Gynecology",
+                fields: [
+                    "Obstetrician – Pregnancy and childbirth",
+                    "Gynecologist – Female reproductive system",
+                    "Reproductive Endocrinologist – Fertility issues",
+                    "Maternal-Fetal Medicine – High-risk pregnancy"
+                ]
+            },
+            {
+                id: "emergency",
+                title: "Emergency and Critical Care",
+                fields: [
+                    "Emergency Medicine",
+                    "Critical Care Medicine / Intensivist",
+                    "Trauma Medicine",
+                    "Anesthesiology"
+                ]
+            },
+            {
+                id: "diagnostic",
+                title: "Diagnostic and Technical Specialties",
+                fields: [
+                    "Radiology",
+                    "Diagnostic Radiologist",
+                    "Interventional Radiologist",
+                    "Pathology",
+                    "Clinical Pathology",
+                    "Anatomic Pathology",
+                    "Nuclear Medicine",
+                    "Laboratory Medicine"
+                ]
+            },
+            {
+                id: "pediatric",
+                title: "Pediatric Subspecialties",
+                fields: [
+                    "Pediatric Cardiology",
+                    "Pediatric Endocrinology",
+                    "Pediatric Neurology",
+                    "Pediatric Oncology",
+                    "Pediatric Gastroenterology",
+                    "Neonatology – Newborns"
+                ]
+            }
+        ];
+
+        // Doctor images
+        const maleDoctorImages = [
+            "https://images.pexels.com/photos/4173239/pexels-photo-4173239.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/5452291/pexels-photo-5452291.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/8376181/pexels-photo-8376181.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/8376178/pexels-photo-8376178.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/8376190/pexels-photo-8376190.jpeg?auto=compress&cs=tinysrgb&w=400"
+        ];
+
+        const femaleDoctorImages = [
+            "https://images.pexels.com/photos/8376197/pexels-photo-8376197.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/8376191/pexels-photo-8376191.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/8376200/pexels-photo-8376200.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/8376194/pexels-photo-8376194.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=400",
+            "https://images.pexels.com/photos/5452200/pexels-photo-5452200.jpeg?auto=compress&cs=tinysrgb&w=400"
+        ];
+
+        // Indian names
+        const maleNames = ["Rajesh Kumar", "Vikram Singh", "Arjun Patel", "Sanjay Sharma", "Rahul Verma", "Amit Joshi", "Deepak Mehta", "Kunal Shah", "Vishal Reddy", "Nikhil Kapoor", "Prakash Gupta", "Suresh Iyer", "Manoj Nair", "Harish Choudhary", "Gaurav Malhotra"];
+        const femaleNames = ["Priya Sharma", "Anjali Patel", "Sunita Reddy", "Neha Gupta", "Divya Singh", "Kavita Mehta", "Shreya Kapoor", "Nisha Joshi", "Bhavna Verma", "Deepa Kumar", "Meera Nair", "Pooja Iyer", "Sonia Choudhary", "Ritu Malhotra", "Ananya Shah"];
+        const qualifications = ["MD", "MBBS", "MS", "DNB", "DM", "MCh", "PhD"];
+
+        function generateRandomDoctor(field) {
+            const isMale = Math.random() > 0.5;
+            const firstName = isMale ?
+                maleNames[Math.floor(Math.random() * maleNames.length)] :
+                femaleNames[Math.floor(Math.random() * femaleNames.length)];
+
+            const qualification = qualifications[Math.floor(Math.random() * qualifications.length)];
+            const rating = (Math.random() * 1.5 + 3.5).toFixed(1); // Random rating between 3.5 and 5.0
+
+            // Get a random doctor image
+            const images = isMale ? maleDoctorImages : femaleDoctorImages;
+            const imageUrl = images[Math.floor(Math.random() * images.length)];
+
+            return {
+                name: `Dr. ${firstName}`,
+                image: imageUrl,
+                qualification: `${qualification}, ${field.split('–')[0].split('/')[0].trim()}`,
+                rating: rating,
+                specialty: field,
+                categoryTitle: categories.find(cat => cat.fields.includes(field)).title
+            };
+        }
+
+        // Generate all doctors
+        const allDoctors = [];
+        categories.forEach(category => {
+            category.fields.forEach(field => {
+                // Add 2 male and 2 female doctors for each field
+                for (let i = 0; i < 2; i++) {
+                    allDoctors.push(generateRandomDoctor(field));
+                    allDoctors.push(generateRandomDoctor(field));
+                }
+            });
+        });
+
+        // Pagination variables
+        const doctorsPerPage = 8;
+        let currentPage = 1;
+        let filteredDoctors = [...allDoctors];
+
+        // Render doctors with pagination
+        function renderDoctors() {
+            const startIndex = (currentPage - 1) * doctorsPerPage;
+            const endIndex = startIndex + doctorsPerPage;
+            const doctorsToShow = filteredDoctors.slice(startIndex, endIndex);
+
+            const doctorsGrid = document.getElementById('doctorsGrid');
+
+            if (doctorsToShow.length === 0) {
+                doctorsGrid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search fa-3x" style="margin-bottom: 1rem;"></i>
+                        <h3>No doctors found</h3>
+                        <p>Try adjusting your search terms</p>
+                    </div>
+                `;
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            doctorsGrid.innerHTML = doctorsToShow.map(doctor => `
+                <div class="doctor-card">
+                    <div class="doctor-card-img">
+                        <img src="${doctor.image}" alt="${doctor.name}">
+                        <span class="category-tag">${doctor.categoryTitle.split(' ')[0]}</span>
+                    </div>
+                    <div class="doctor-card-content">
+                        <h3>${doctor.name}</h3>
+                        <div class="specialty">${doctor.specialty.split('–')[0]}</div>
+                        <div class="qualification">${doctor.qualification}</div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> ${doctor.rating}
+                        </div>
+                        <button class="btn btn-primary appointment-btn">Book Appointment</button>
+                    </div>
+                </div>
+            `).join('');
+
+            renderPagination();
+        }
+
+        // Render pagination controls
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredDoctors.length / doctorsPerPage);
+            const paginationContainer = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            // Calculate the range of pages to show
+            const maxVisiblePages = window.innerWidth < 576 ? 5 : 7;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            let paginationHTML = `
+                <button id="prevPage" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+
+            // Show first page if not in the beginning
+            if (startPage > 1) {
+                paginationHTML += `<button class="page-btn ${1 === currentPage ? 'active' : ''}">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<button class="ellipsis">...</button>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="page-btn ${i === currentPage ? 'active' : ''}">${i}</button>
+                `;
+            }
+
+            // Show last page if not in the end
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<button class="ellipsis">...</button>`;
+                }
+                paginationHTML += `<button class="page-btn ${totalPages === currentPage ? 'active' : ''}">${totalPages}</button>`;
+            }
+
+            paginationHTML += `
+                <button id="nextPage" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+
+            // Add mobile-friendly pagination controls
+            paginationHTML += `
+                <div class="pagination-controls">
+                    <button id="prevPageMobile" class="btn btn-outline" ${currentPage === 1 ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button id="nextPageMobile" class="btn btn-outline" ${currentPage === totalPages ? 'disabled' : ''}>
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            `;
+
+            paginationContainer.innerHTML = paginationHTML;
+
+            // Add event listeners
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderDoctors();
+                }
+            });
+
+            document.getElementById('nextPage').addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderDoctors();
+                }
+            });
+
+            document.getElementById('prevPageMobile').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderDoctors();
+                }
+            });
+
+            document.getElementById('nextPageMobile').addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderDoctors();
+                }
+            });
+
+            document.querySelectorAll('.page-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    currentPage = parseInt(e.target.textContent);
+                    renderDoctors();
+                });
+            });
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+
+        function filterDoctors() {
+            const term = searchInput.value.toLowerCase().trim();
+            currentPage = 1;
+
+            if (term === '') {
+                filteredDoctors = [...allDoctors];
+                renderDoctors();
+                return;
+            }
+
+            filteredDoctors = allDoctors.filter(doctor => {
+                return doctor.name.toLowerCase().includes(term) ||
+                    doctor.specialty.toLowerCase().includes(term) ||
+                    doctor.qualification.toLowerCase().includes(term) ||
+                    doctor.categoryTitle.toLowerCase().includes(term);
+            });
+
+            renderDoctors();
+        }
+
+        searchInput.addEventListener('input', filterDoctors);
+        searchButton.addEventListener('click', filterDoctors);
+
+        // Book appointment functionality
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('appointment-btn')) {
+                const card = e.target.closest('.doctor-card');
+                const name = card.querySelector('h3').textContent;
+                const specialty = card.querySelector('.specialty').textContent;
+                alert(`Appointment booked with ${name}, ${specialty}!`);
+            }
+        });
+
+        // Initial render
+        renderDoctors();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TeleHealth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="/css/contact.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span class="logo-text">TeleHealth</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/landing"><i class="fas fa-home"></i> Home</a>
+                <a href="/services"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="/contact" class="active"><i class="fas fa-address-book"></i> Contact</a>
+                <a href="/login" class="btn btn-outline"><i class="fas fa-user-plus"></i>Login</a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <div class="mobile-controls">
+                <button class="theme-toggle" id="mobileThemeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="/landing"><i class="fas fa-home"></i> Home</a>
+        <a href="/services"><i class="fas fa-concierge-bell"></i> Services</a>
+        <a href="/contact" class="active"><i class="fas fa-address-book"></i> Contact</a>
+        <a href="/login" class="btn btn-outline"><i class="fas fa-user-plus"></i>Login</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="contact-header">
+            <h1>Get in Touch</h1>
+            <p>Have questions about our telehealth services? Our team is here to help you. Reach out to us anytime and
+                we'll get back to you as soon as possible.</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Contact Information</h2>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Our Location</h3>
+                        <p>123 Healthcare Avenue, MedCity, CA 90210</p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Phone Number</h3>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Email Address</h3>
+                        <p>support@telehealth.com</p>
+                    </div>
+                </div>
+
+                <div class="hours">
+                    <h3>Business Hours</h3>
+                    <ul>
+                        <li><span>Monday - Friday</span> <span>8:00 AM - 8:00 PM</span></li>
+                        <li><span>Saturday</span> <span>9:00 AM - 5:00 PM</span></li>
+                        <li><span>Sunday</span> <span>9:00 AM - 2:00 PM</span></li>
+                        <li><span>Emergency</span> <span>24/7</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h2>Send Us a Message</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-control" placeholder="What is this regarding?"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" placeholder="How can we help you?"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+
+            <div class="map-container">
+                <!-- Google Maps Embed -->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52860.78943010464!2d-118.4145455!3d34.1003495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2bc35fbd217ef%3A0xcf1ef9352700d95c!2sBeverly%20Hills%2C%20CA%2C%20USA!5e0!3m2!1sen!2s!4v1718755939281!5m2!1sen!2s"
+                    allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chat-bubble" id="chat-bubble">
+            Need help? Chat with our AI assistant!
+        </div>
+        <div class="chatbot" id="chatbot">
+            <i class="fas fa-robot"></i>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span class="logo-text">TeleHealth</span>
+                </div>
+                <p>Providing accessible and quality healthcare services through innovative telehealth solutions for
+                    patients worldwide.</p>
+            </div>
+
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/pages/landing.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="/pages/service.html"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="/pages/contact.html"><i class="fas fa-chevron-right"></i> Doctors</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Appointments</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Our Services</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Video Consultations</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Remote Monitoring</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> E-Prescriptions</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Health Records</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Mental Health</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Healthcare St, MedCity</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> support@telehealth.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2023 TeleHealth. All rights reserved.
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or respect OS preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (savedTheme) {
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = theme === 'dark' ? 'fa-sun' : 'fa-moon';
+            themeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
+            mobileThemeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        mobileThemeToggle.addEventListener('click', toggleTheme);
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mobileMenu.classList.contains('active') &&
+                !mobileMenu.contains(e.target) &&
+                e.target !== mobileMenuBtn) {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Form validation and submission
+        const contactForm = document.getElementById('contactForm');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            // Simple validation
+            if (!name || !email || !phone || !subject || !message) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            // Phone validation (simple version)
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+
+            // Show success message
+            alert(`Thank you ${name}! Your message has been sent successfully.\n\nWe'll contact you at ${email} or ${phone} soon.`);
+
+            // Reset form
+            contactForm.reset();
+        });
+
+        // Show chatbot bubble after delay
+        setTimeout(() => {
+            document.getElementById('chat-bubble').classList.add('active');
+        }, 3000);
+    </script>
+</body>
+
+</html>

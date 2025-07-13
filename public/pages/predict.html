@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID-19 Infection Predictor | TeleHealth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+        <link href="/css/predict.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar">
+            <a href="/home" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span class="logo-text">TeleHealth</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/home"><i class="fas fa-home"></i> Home</a>
+                <a href="/vault"><i class="fas fa-lock"></i> Vault</a>
+                <a href="/appointments" class="active"><i class="fas fa-robot"></i>AI COVID Predictor</a>
+                <a href="/doctors"><i class="fas fa-user-md"></i> Doctors</a>
+                <a href="/profile" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i>Profile</a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <div class="mobile-controls">
+                <button class="theme-toggle" id="mobileThemeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="/home"><i class="fas fa-home"></i> Home</a>
+        <a href="/vault"><i class="fas fa-lock"></i> Vault</a>
+        <a href="/appointments" class="active"><i class="fas fa-robot"></i> AI COVID Predictor</a>
+        <a href="/doctors"><i class="fas fa-user-md"></i> Doctors</a>
+        <a href="/profile" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i>Profile</a>
+    </div>
+
+    <!-- Predict Section -->
+    <section class="predict">
+        <div class="predict-header">
+            <h1>COVID-19 Infection Predictor</h1>
+            <p>Assess your risk of COVID-19 infection based on symptoms, demographics, and exposure history. Our
+                AI-powered tool provides an instant risk assessment.</p>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="predict-container">
+            <div class="form-container">
+                <form action="/predict" method="POST" id="predictForm">
+                    <div class="form-section">
+                        <h3><i class="fas fa-thermometer-half"></i> Symptoms</h3>
+                        <div class="symptoms-grid">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Fever" name="Fever" value="1">
+                                <label for="Fever">Fever</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Tiredness" name="Tiredness" value="1">
+                                <label for="Tiredness">Tiredness</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Dry-Cough" name="Dry-Cough" value="1">
+                                <label for="Dry-Cough">Dry Cough</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Difficulty-in-Breathing" name="Difficulty-in-Breathing"
+                                    value="1">
+                                <label for="Difficulty-in-Breathing">Difficulty Breathing</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Sore-Throat" name="Sore-Throat" value="1">
+                                <label for="Sore-Throat">Sore Throat</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Pains" name="Pains" value="1">
+                                <label for="Pains">Body Pains</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Nasal-Congestion" name="Nasal-Congestion" value="1">
+                                <label for="Nasal-Congestion">Nasal Congestion</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Runny-Nose" name="Runny-Nose" value="1">
+                                <label for="Runny-Nose">Runny Nose</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="Diarrhea" name="Diarrhea" value="1">
+                                <label for="Diarrhea">Diarrhea</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Age Group</h3>
+                        <div class="radio-group">
+                            <div class="radio-option" data-value="Age_0-9">
+                                <input type="radio" name="Age" value="Age_0-9" id="Age_0-9">
+                                <label for="Age_0-9">0–9</label>
+                            </div>
+                            <div class="radio-option" data-value="Age_10-19">
+                                <input type="radio" name="Age" value="Age_10-19" id="Age_10-19">
+                                <label for="Age_10-19">10–19</label>
+                            </div>
+                            <div class="radio-option" data-value="Age_20-24">
+                                <input type="radio" name="Age" value="Age_20-24" id="Age_20-24">
+                                <label for="Age_20-24">20–24</label>
+                            </div>
+                            <div class="radio-option" data-value="Age_25-59">
+                                <input type="radio" name="Age" value="Age_25-59" id="Age_25-59">
+                                <label for="Age_25-59">25–59</label>
+                            </div>
+                            <div class="radio-option" data-value="Age_60+">
+                                <input type="radio" name="Age" value="Age_60+" id="Age_60+">
+                                <label for="Age_60+">60+</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-venus-mars"></i> Gender</h3>
+                        <div class="radio-group">
+                            <div class="radio-option" data-value="Gender_Male">
+                                <input type="radio" name="Gender" value="Gender_Male" id="Gender_Male">
+                                <label for="Gender_Male">Male</label>
+                            </div>
+                            <div class="radio-option" data-value="Gender_Female">
+                                <input type="radio" name="Gender" value="Gender_Female" id="Gender_Female">
+                                <label for="Gender_Female">Female</label>
+                            </div>
+                            <div class="radio-option" data-value="Gender_Transgender">
+                                <input type="radio" name="Gender" value="Gender_Transgender" id="Gender_Transgender">
+                                <label for="Gender_Transgender">Transgender</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i class="fas fa-users"></i> Contact with Infected Person</h3>
+                        <div class="radio-group">
+                            <div class="radio-option" data-value="Contact_Yes">
+                                <input type="radio" name="Contact" value="Contact_Yes" id="Contact_Yes">
+                                <label for="Contact_Yes">Yes</label>
+                            </div>
+                            <div class="radio-option" data-value="Contact_No">
+                                <input type="radio" name="Contact" value="Contact_No" id="Contact_No">
+                                <label for="Contact_No">No</label>
+                            </div>
+                            <div class="radio-option" data-value="Contact_Dont-Know">
+                                <input type="radio" name="Contact" value="Contact_Dont-Know" id="Contact_Dont-Know">
+                                <label for="Contact_Dont-Know">Don't Know</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary submit-btn">
+                        <i class="fas fa-brain"></i> Predict Infection Risk
+                    </button>
+                </form>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> Important Note</h3>
+                    <p>This tool is for informational purposes only. It is not a substitute for professional medical
+                        advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified
+                        health provider with any questions you may have regarding a medical condition.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Warning Signs</h3>
+                    <p>Seek emergency medical care immediately if you experience:</p>
+                    <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Difficulty breathing</li>
+                        <li>Persistent chest pain or pressure</li>
+                        <li>New confusion</li>
+                        <li>Inability to wake or stay awake</li>
+                        <li>Pale, gray, or blue-colored skin, lips, or nail beds</li>
+                    </ul>
+                </div>
+
+                <div class="symptom-severity">
+                    <h3><i class="fas fa-signal"></i> Symptom Severity</h3>
+                    <div class="severity-item">
+                        <div class="severity-color low"></div>
+                        <span>Low Risk Symptoms</span>
+                    </div>
+                    <div class="severity-item">
+                        <div class="severity-color medium"></div>
+                        <span>Moderate Risk Symptoms</span>
+                    </div>
+                    <div class="severity-item">
+                        <div class="severity-color high"></div>
+                        <span>High Risk Symptoms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="result-icon" id="resultIcon">
+                <i class="fas fa-virus"></i>
+            </div>
+            <h2 id="resultTitle">COVID-19 Risk Assessment</h2>
+            <p id="resultDescription">Based on your inputs, our assessment shows:</p>
+            <div>
+                <button class="btn btn-primary" id="newAssessmentBtn">
+                    <i class="fas fa-redo"></i> New Assessment
+                </button>
+                <button class="btn btn-outline" id="doctorConsultBtn">
+                    <i class="fas fa-user-md"></i> Consult Doctor
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chat-bubble" id="chat-bubble">
+            Need help with COVID assessment? I can assist!
+        </div>
+        <div class="chatbot" id="chatbot">
+            <i class="fas fa-robot"></i>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span class="logo-text">TeleHealth</span>
+                </div>
+                <p>Providing accessible and quality healthcare services through innovative telehealth solutions for
+                    patients worldwide.</p>
+            </div>
+
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Doctors</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Appointments</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Our Services</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Video Consultations</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Remote Monitoring</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> E-Prescriptions</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Health Records</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Mental Health</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Healthcare St, MedCity</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> support@telehealth.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2023 TeleHealth. All rights reserved.
+            </div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or respect OS preference
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (savedTheme) {
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = theme === 'dark' ? 'fa-sun' : 'fa-moon';
+            themeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
+            mobileThemeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        mobileThemeToggle.addEventListener('click', toggleTheme);
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mobileMenu.classList.contains('active') &&
+                !mobileMenu.contains(e.target) &&
+                e.target !== mobileMenuBtn) {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Chatbot functionality
+        const chatBubble = document.getElementById('chat-bubble');
+        const chatbot = document.getElementById('chatbot');
+
+        // Show chat bubble after 3 seconds
+        setTimeout(() => {
+            chatBubble.classList.add('active');
+        }, 3000);
+
+        chatbot.addEventListener('click', () => {
+            alert('Chatbot feature would open here. This is a frontend demonstration.');
+        });
+
+        // Form interactivity
+        const radioOptions = document.querySelectorAll('.radio-option');
+        radioOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove selected class from all options in the same group
+                const group = option.closest('.radio-group');
+                group.querySelectorAll('.radio-option').forEach(el => {
+                    el.classList.remove('selected');
+                });
+
+                // Add selected class to clicked option
+                option.classList.add('selected');
+
+                // Check the radio input
+                const radioInput = option.querySelector('input[type="radio"]');
+                radioInput.checked = true;
+            });
+        });
+
+            predictForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Show loading animation
+                progressBar.style.width = '100%';
+
+                const formData = new FormData(predictForm);
+                const formJson = {};
+
+                for (const [key, value] of formData.entries()) {
+                    if (formJson[key]) continue; // avoid duplicates for radio
+                    formJson[key] = 1;
+                }
+
+                try {
+                    const response = await fetch("/predict", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(formJson)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Prediction service is currently unavailable.");
+                    }
+
+                    const result = await response.json();
+
+                    const isPositive = result.prediction === 1;
+
+                    if (isPositive) {
+                        resultIcon.innerHTML = '<i class="fas fa-virus"></i>';
+                        resultIcon.classList.add('positive');
+                        resultIcon.classList.remove('negative');
+                        resultTitle.textContent = 'High Risk of Infection';
+                        resultTitle.style.color = '#ef4444';
+                        resultDescription.textContent = 'Based on your symptoms and exposure history, there is a high likelihood of COVID-19 infection. Please self-isolate immediately and contact a healthcare provider for testing.';
+                    } else {
+                        resultIcon.innerHTML = '<i class="fas fa-shield-virus"></i>';
+                        resultIcon.classList.add('negative');
+                        resultIcon.classList.remove('positive');
+                        resultTitle.textContent = 'Low Risk of Infection';
+                        resultTitle.style.color = '#10b981';
+                        resultDescription.textContent = 'Based on your symptoms and exposure history, your risk of COVID-19 infection appears low. Continue to monitor your health and follow public health guidelines.';
+                    }
+
+                    resultContainer.style.display = 'block';
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+
+                } catch (error) {
+                    alert("Prediction service is currently unavailable. Please try again later.");
+                    console.error("Prediction error:", error);
+                    progressBar.style.width = '0%';
+                }
+            });
+
+    </script>
+</body>
+
+</html>
