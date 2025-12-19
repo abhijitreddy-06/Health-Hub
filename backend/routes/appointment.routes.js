@@ -81,6 +81,37 @@ export default function appointmentRoutes(app) {
             res.json(result.rows);
         }
     );
+    app.post(
+        "/appointments/:id/start",
+        authenticate,
+        authorize("doctor"),
+        async (req, res) => {
+            const { id } = req.params;
+            const roomId = crypto.randomUUID();
+
+            const result = await db.query(
+                `
+      UPDATE appointments
+      SET status = 'started',
+          room_id = $1
+      WHERE id = $2
+        AND doctor_id = $3
+        AND status = 'scheduled'
+      RETURNING room_id
+      `,
+                [roomId, id, req.user.id]
+            );
+
+            if (!result.rowCount) {
+                return res.status(400).json({
+                    error: "Call already started or completed"
+                });
+            }
+
+            // 🔴 IMPORTANT: return roomId
+            res.json({ roomId });
+        }
+    );
 
     /* ===============================
        DOCTOR APPOINTMENTS (API)

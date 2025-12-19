@@ -141,14 +141,27 @@
     async function startCall() {
         if (!appointmentId) return;
 
-        const res = await fetch(`/appointments/${appointmentId}/start`, {
-            method: "POST"
-        });
+        try {
+            const res = await fetch(`/appointments/${appointmentId}/start`, {
+                method: "POST"
+            });
 
-        if (res.redirected) {
-            window.location.href = res.url;
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.error || "Unable to start call");
+                return;
+            }
+
+            // 🔥 THIS is the missing redirect
+            window.location.href = `/doc_video/${data.roomId}`;
+
+        } catch (err) {
+            console.error(err);
+            alert("Server error while starting call");
         }
     }
+
 
     loadAppointment();
 </script>

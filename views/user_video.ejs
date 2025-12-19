@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Doctor Video Call | TeleHealth</title>
+    <title>User Video Call | TeleHealth</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
@@ -21,7 +21,6 @@
             overflow: hidden;
         }
 
-        /* VIDEO LAYOUT */
         #remoteVideo {
             position: fixed;
             inset: 0;
@@ -34,15 +33,13 @@
             position: fixed;
             bottom: 90px;
             right: 20px;
-            width: 220px;
-            height: 160px;
+            width: 200px;
+            height: 150px;
             object-fit: cover;
             border-radius: 12px;
             border: 2px solid #38bdf8;
-            background: #000;
         }
 
-        /* CONTROLS */
         .controls {
             position: fixed;
             bottom: 20px;
@@ -57,19 +54,9 @@
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .mic,
-        .cam {
             background: #1e293b;
             color: #fff;
-        }
-
-        .end {
-            background: #ef4444;
-            color: #fff;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -80,17 +67,14 @@
     <video id="localVideo" autoplay muted playsinline></video>
 
     <div class="controls">
-        <button class="mic" id="toggleMic">Mic</button>
-        <button class="cam" id="toggleCam">Cam</button>
-        <button class="end" id="endCallBtn">End Call</button>
+        <button id="toggleMic">Mic</button>
+        <button id="toggleCam">Cam</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-
         const ROOM_ID = "<%= roomId %>";
-        const APPOINTMENT_ID = "<%= appointment.id %>";
 
         let pc, localStream;
         let micOn = true, camOn = true;
@@ -143,7 +127,6 @@
                 await pc.addIceCandidate(new RTCIceCandidate(payload.candidate));
         });
 
-        /* CONTROLS */
         toggleMic.onclick = () => {
             micOn = !micOn;
             localStream.getAudioTracks()[0].enabled = micOn;
@@ -154,19 +137,10 @@
             localStream.getVideoTracks()[0].enabled = camOn;
         };
 
-        /* END CALL */
-        endCallBtn.onclick = async () => {
-            socket.emit("call-ended", { roomId: ROOM_ID });
-
-            await fetch(`/appointments/${APPOINTMENT_ID}/complete`, { method: "POST" });
-
-            cleanup();
-            window.location.href = "/doc_video_dashboard";
-        };
-
         socket.on("call-ended", () => {
             cleanup();
-            window.location.href = "/doc_video_dashboard";
+            alert("Doctor ended the call");
+            window.location.href = "/user_video_dashboard";
         });
 
         function cleanup() {
