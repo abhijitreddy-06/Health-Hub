@@ -11,6 +11,15 @@ export default function videoSocket(io) {
             socket.to(roomId).emit("signal", payload);
         });
 
+        // 🔹 CHAT MESSAGE
+        socket.on("chat-message", ({ roomId, message, sender }) => {
+            io.to(roomId).emit("chat-message", {
+                message,
+                sender,
+                time: new Date().toLocaleTimeString()
+            });
+        });
+
         socket.on("call-ended", ({ roomId }) => {
             io.to(roomId).emit("call-ended");
             io.in(roomId).socketsLeave(roomId);

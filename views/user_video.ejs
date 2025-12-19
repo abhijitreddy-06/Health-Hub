@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Video Call | TeleHealth</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
     <style>
@@ -21,32 +21,38 @@
             overflow: hidden;
         }
 
+        /* ================= VIDEO ================= */
         #remoteVideo {
             position: fixed;
             inset: 0;
             width: 100vw;
             height: 100vh;
             object-fit: cover;
+            background: #000;
         }
 
         #localVideo {
             position: fixed;
-            bottom: 90px;
+            bottom: 110px;
             right: 20px;
             width: 200px;
             height: 150px;
             object-fit: cover;
             border-radius: 12px;
             border: 2px solid #38bdf8;
+            background: #000;
+            z-index: 10;
         }
 
+        /* ================= CONTROLS ================= */
         .controls {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             gap: 14px;
+            z-index: 10;
         }
 
         .controls button {
@@ -54,23 +60,97 @@
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            background: #1e293b;
-            color: #fff;
+            font-size: 14px;
             font-weight: 600;
+            background: #1e293b;
+            color: white;
+        }
+
+        /* ================= CHAT ================= */
+        .chat-panel {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: #020617;
+            transition: 0.3s;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-panel.open {
+            right: 0;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid #1e293b;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            font-size: 14px;
+            color: white;
+        }
+
+        .chat-messages div {
+            margin-bottom: 8px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 0.8rem;
+            gap: 6px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 6px;
+            border: none;
+        }
+
+        .chat-input button {
+            background: #38bdf8;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
 
+    <!-- VIDEOS -->
     <video id="remoteVideo" autoplay playsinline></video>
     <video id="localVideo" autoplay muted playsinline></video>
 
+    <!-- CONTROLS -->
     <div class="controls">
         <button id="toggleMic">Mic</button>
         <button id="toggleCam">Cam</button>
+        <button id="chatToggle">Chat</button>
     </div>
 
+    <!-- CHAT PANEL -->
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-header">Consultation Chat</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+            <input id="chatInput" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- SOCKET -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
@@ -81,62 +161,128 @@
 
         const localVideo = document.getElementById("localVideo");
         const remoteVideo = document.getElementById("remoteVideo");
+        const chatPanel = document.getElementById("chatPanel");
+
+        document.getElementById("chatToggle").onclick = () => {
+            chatPanel.classList.toggle("open");
+        };
 
         const config = {
             iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
         };
 
         async function init() {
-            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            localStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            });
+
             localVideo.srcObject = localStream;
             socket.emit("join-room", ROOM_ID);
         }
 
         function createPeer() {
             pc = new RTCPeerConnection(config);
-            localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
 
-            pc.ontrack = e => remoteVideo.srcObject = e.streams[0];
-            pc.onicecandidate = e => e.candidate && socket.emit("signal", {
-                roomId: ROOM_ID,
-                payload: { candidate: e.candidate }
-            });
+            localStream.getTracks().forEach(track =>
+                pc.addTrack(track, localStream)
+            );
+
+            pc.ontrack = e => {
+                remoteVideo.srcObject = e.streams[0];
+            };
+
+            pc.onicecandidate = e => {
+                if (e.candidate) {
+                    socket.emit("signal", {
+                        roomId: ROOM_ID,
+                        payload: { candidate: e.candidate }
+                    });
+                }
+            };
         }
 
         socket.on("user-joined", async () => {
             createPeer();
             const offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
-            socket.emit("signal", { roomId: ROOM_ID, payload: { offer } });
+
+            socket.emit("signal", {
+                roomId: ROOM_ID,
+                payload: { offer }
+            });
         });
 
         socket.on("signal", async payload => {
             if (!pc) createPeer();
 
             if (payload.offer) {
-                await pc.setRemoteDescription(new RTCSessionDescription(payload.offer));
+                await pc.setRemoteDescription(payload.offer);
                 const answer = await pc.createAnswer();
                 await pc.setLocalDescription(answer);
-                socket.emit("signal", { roomId: ROOM_ID, payload: { answer } });
+
+                socket.emit("signal", {
+                    roomId: ROOM_ID,
+                    payload: { answer }
+                });
             }
 
-            if (payload.answer)
-                await pc.setRemoteDescription(new RTCSessionDescription(payload.answer));
+            if (payload.answer) {
+                await pc.setRemoteDescription(payload.answer);
+            }
 
-            if (payload.candidate)
-                await pc.addIceCandidate(new RTCIceCandidate(payload.candidate));
+            if (payload.candidate) {
+                await pc.addIceCandidate(payload.candidate);
+            }
         });
 
-        toggleMic.onclick = () => {
-            micOn = !micOn;
-            localStream.getAudioTracks()[0].enabled = micOn;
-        };
+        /* ================= CONTROLS ================= */
+    document.getElementById("toggleMic").onclick = () => {
+        if (!localStream) return;
 
-        toggleCam.onclick = () => {
-            camOn = !camOn;
-            localStream.getVideoTracks()[0].enabled = camOn;
-        };
+        localStream.getAudioTracks().forEach(track => {
+            track.enabled = !track.enabled;
+            micOn = track.enabled;
+        });
 
+        document.getElementById("toggleMic").innerText =
+            micOn ? "Mic" : "Mic Off";
+    };
+
+    document.getElementById("toggleCam").onclick = () => {
+        if (!localStream) return;
+
+        localStream.getVideoTracks().forEach(track => {
+            track.enabled = !track.enabled;
+            camOn = track.enabled;
+        });
+
+        document.getElementById("toggleCam").innerText =
+            camOn ? "Cam" : "Cam Off";
+    };
+
+
+        /* ================= CHAT ================= */
+        function sendMessage() {
+            const input = document.getElementById("chatInput");
+            if (!input.value.trim()) return;
+
+            socket.emit("chat-message", {
+                roomId: ROOM_ID,
+                message: input.value,
+                sender: "User"
+            });
+
+            input.value = "";
+        }
+
+        socket.on("chat-message", data => {
+            const msg = document.createElement("div");
+            msg.innerText = `[${data.time}] ${data.sender}: ${data.message}`;
+            document.getElementById("chatMessages").appendChild(msg);
+        });
+
+        /* ================= CALL END ================= */
         socket.on("call-ended", () => {
             cleanup();
             alert("Doctor ended the call");
@@ -146,6 +292,8 @@
         function cleanup() {
             if (pc) pc.close();
             if (localStream) localStream.getTracks().forEach(t => t.stop());
+            localVideo.srcObject = null;
+            remoteVideo.srcObject = null;
         }
 
         init();
