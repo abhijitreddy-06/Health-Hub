@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-        <link href="/css/login.css" rel="stylesheet">
+    <link href="/css/user_login.css" rel="stylesheet">
 </head>
 
 <body>
@@ -24,7 +24,7 @@
                 <a href="/"><i class="fas fa-home"></i> Home</a>
                 <a href="/services"><i class="fas fa-concierge-bell"></i> Services</a>
                 <a href="/contact"><i class="fas fa-address-book"></i> Contact</a>
-                <a href="/signup" class="btn btn-outline"><i class="fas fa-user-plus"></i> Sign Up</a>
+                <a href="/user_signup" class="btn btn-outline"><i class="fas fa-user-plus"></i> Sign Up</a>
                 <button class="theme-toggle" id="themeToggle">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -49,7 +49,7 @@
         <a href="/"><i class="fas fa-home"></i> Home</a>
         <a href="/services"><i class="fas fa-concierge-bell"></i> Services</a>
         <a href="/contact"><i class="fas fa-address-book"></i> Contact</a>
-        <a href="/signup" class="btn btn-outline"><i class="fas fa-user-plus"></i> Sign Up</a>
+        <a href="/user_signup" class="btn btn-outline"><i class="fas fa-user-plus"></i> Sign Up</a>
     </div>
 
     <!-- Main Content -->
@@ -61,7 +61,7 @@
                     <p>Sign in to access your TeleHealth account</p>
                 </div>
 
-                <form id="loginForm" action="/login" method="post">
+                <form id="loginForm" action="/user_login" method="post">
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
                         <div class="input-group">
@@ -76,7 +76,7 @@
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" class="form-control" placeholder="Enter your password"
-                          name="password"  required>
+                            name="password" required>
                     </div>
 
                     <div class="form-footer">
@@ -89,7 +89,7 @@
                     </button>
 
                     <p style="text-align: center; margin-top: 1.5rem; color: var(--text-medium);">
-                        Don't have an account? <a href="/pages/signup.html" class="signup-link">Sign Up</a>
+                        Don't have an account? <a href="/user_signup" class="signup-link">Sign Up</a>
                     </p>
                 </form>
             </div>
@@ -118,11 +118,11 @@
             <div class="footer-links">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Doctors</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Appointments</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    <li><a href="/"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="/services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="/user_doctors"><i class="fas fa-chevron-right"></i> Doctors</a></li>
+                    <li><a href="/appointments"><i class="fas fa-chevron-right"></i> Appointments</a></li>
+                    <li><a href="/contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
                 </ul>
             </div>
 
@@ -216,7 +216,7 @@
             }
         });
 
-        
+
     </script>
 </body>
 

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Video Dashboard | TeleHealth</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --header: #020617;
+            --primary: #38bdf8;
+            --success: #22c55e;
+            --warning: #facc15;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background: var(--header);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            color: var(--primary);
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        header span {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        /* ================= MAIN ================= */
+        main {
+            flex: 1;
+            padding: 3rem 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .info {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--muted);
+        }
+
+        .info strong {
+            color: var(--text);
+        }
+
+        .status {
+            margin-top: 1.2rem;
+            font-weight: 600;
+            color: var(--warning);
+        }
+
+        .status.ready {
+            color: var(--success);
+        }
+
+        .status.done {
+            color: var(--muted);
+        }
+
+        button {
+            margin-top: 2rem;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: var(--success);
+            color: #022c22;
+            transition: 0.3s;
+        }
+
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            color: #cbd5e1;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background: var(--header);
+            text-align: center;
+            padding: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header>
+        <a href="/user_home">TeleHealth</a>
+        <span>Video Consultation</span>
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main>
+        <div class="card">
+            <h2>Your Appointment</h2>
+
+            <p class="info">
+                Doctor:
+                <strong id="doctorName">Loading...</strong>
+            </p>
+
+            <p class="info">
+                Date:
+                <strong id="apptDate">—</strong> |
+                Time:
+                <strong id="apptTime">—</strong>
+            </p>
+
+            <p id="statusText" class="status">
+                Checking appointment status...
+            </p>
+
+            <button id="joinBtn" disabled onclick="joinCall()">
+                Join Video Call
+            </button>
+        </div>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        © 2025 TeleHealth. All rights reserved.
+    </footer>
+
+    <!-- ================= SCRIPT ================= -->
+    <script>
+        let roomId = null;
+        let polling = null;
+
+        async function loadAppointment() {
+            try {
+                const res = await fetch("/api/appointments/user");
+                const appointments = await res.json();
+
+                // No active appointments
+                if (!appointments.length) {
+                    clearInterval(polling);
+                    document.getElementById("doctorName").innerText = "—";
+                    document.getElementById("apptDate").innerText = "—";
+                    document.getElementById("apptTime").innerText = "—";
+                    document.getElementById("statusText").innerText =
+                        "No active appointments.";
+                    document.getElementById("statusText").className = "status done";
+                    document.getElementById("joinBtn").disabled = true;
+                    return;
+                }
+
+                const appt = appointments[0];
+
+                document.getElementById("doctorName").innerText =
+                    `${appt.doctor_name} (${appt.specialization})`;
+
+                document.getElementById("apptDate").innerText =
+                    appt.appointment_date;
+
+                document.getElementById("apptTime").innerText =
+                    appt.appointment_time;
+
+                // Scheduled
+                if (appt.status === "scheduled") {
+                    document.getElementById("statusText").innerText =
+                        "Waiting for doctor to start the call...";
+                    document.getElementById("statusText").className = "status";
+                    document.getElementById("joinBtn").disabled = true;
+                }
+
+                // Started
+                if (appt.status === "started" && appt.room_id) {
+                    roomId = appt.room_id;
+                    document.getElementById("statusText").innerText =
+                        "Doctor has started the call";
+                    document.getElementById("statusText").className = "status ready";
+                    document.getElementById("joinBtn").disabled = false;
+                }
+
+                // Completed
+                if (appt.status === "completed") {
+                    clearInterval(polling);
+                    document.getElementById("statusText").innerText =
+                        "Appointment completed";
+                    document.getElementById("statusText").className = "status done";
+                    document.getElementById("joinBtn").disabled = true;
+                }
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById("statusText").innerText =
+                    "Failed to load appointment";
+            }
+        }
+
+        function joinCall() {
+            if (!roomId) return;
+            window.location.href = `/user_video/${roomId}`;
+        }
+
+        loadAppointment();
+        polling = setInterval(loadAppointment, 5000);
+    </script>
+
+</body>
+
+</html>

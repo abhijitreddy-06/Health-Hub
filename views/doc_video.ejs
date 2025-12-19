@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Video Call</title>
+</head>
+
+<body>
+
+    <h2>Doctor Video Call</h2>
+
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+
+    <button id="endCallBtn">End Call</button>
+
+    <!-- 🔹 Inject backend data -->
+    <script>
+        const ROOM_ID = "<%= appointment.room_id %>";
+        const APPOINTMENT_ID = "<%= appointment.id %>";
+    </script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const roomId = ROOM_ID;
+
+        let localStream, pc;
+
+        const localVideo = document.getElementById("localVideo");
+        const remoteVideo = document.getElementById("remoteVideo");
+
+        const config = {
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+        };
+
+        async function init() {
+            localStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            });
+
+            localVideo.srcObject = localStream;
+            socket.emit("join-room", roomId);
+        }
+
+        function createPeer() {
+            pc = new RTCPeerConnection(config);
+
+            localStream.getTracks().forEach(track =>
+                pc.addTrack(track, localStream)
+            );
+
+            pc.ontrack = e => {
+                remoteVideo.srcObject = e.streams[0];
+            };
+
+            pc.onicecandidate = e => {
+                if (e.candidate) {
+                    socket.emit("signal", {
+                        roomId,
+                        data: { candidate: e.candidate }
+                    });
+                }
+            };
+        }
+
+        socket.on("user-joined", async () => {
+            createPeer();
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+
+            socket.emit("signal", {
+                roomId,
+                data: { offer }
+            });
+        });
+
+        socket.on("signal", async ({ offer, answer, candidate }) => {
+            if (!pc) createPeer();
+
+            if (offer) {
+                await pc.setRemoteDescription(new RTCSessionDescription(offer));
+                const ans = await pc.createAnswer();
+                await pc.setLocalDescription(ans);
+
+                socket.emit("signal", {
+                    roomId,
+                    data: { answer: ans }
+                });
+            }
+
+            if (answer) {
+                await pc.setRemoteDescription(new RTCSessionDescription(answer));
+            }
+
+            if (candidate) {
+                await pc.addIceCandidate(new RTCIceCandidate(candidate));
+            }
+        });
+
+        // 🔴 END CALL (THIS IS THE FIX)
+        document.getElementById("endCallBtn").onclick = async () => {
+            socket.emit("end-call", { roomId });
+
+            await fetch(`/appointments/${APPOINTMENT_ID}/complete`, {
+                method: "POST"
+            });
+
+            cleanup();
+            window.location.href = "/doc_video_dashboard";
+        };
+
+        socket.on("call-ended", () => {
+            cleanup();
+            window.location.href = "/doc_video_dashboard";
+        });
+
+        function cleanup() {
+            if (pc) pc.close();
+            if (localStream) localStream.getTracks().forEach(t => t.stop());
+            localVideo.srcObject = null;
+            remoteVideo.srcObject = null;
+        }
+
+        init();
+    </script>
+
+</body>
+
+</html>
