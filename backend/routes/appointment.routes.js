@@ -12,7 +12,9 @@ export default function appointmentRoutes(app) {
         authenticate,
         authorize("user"),
         async (req, res) => {
-            const { doctorId, date, time } = req.body;
+            const { doctorId, appointment_date, appointment_time } = req.body;
+            const date = appointment_date;
+            const time = appointment_time;
 
             try {
                 // 🔴 1. Check if user already has an active appointment
@@ -47,6 +49,7 @@ export default function appointmentRoutes(app) {
                 );
 
                 res.redirect("/user_video_dashboard");
+                console.log("REQ BODY 👉", req.body);
 
             } catch (err) {
                 console.error("Appointment booking error:", err);

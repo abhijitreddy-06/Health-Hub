@@ -3,81 +3,261 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>User Video Call | TeleHealth</title>
+    <title>Video Consultation | TeleHealth</title>
 
+    <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
 
     <style>
+        :root {
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --secondary: #10b981;
+            --background: #0f172a;
+            --card-bg: #1e293b;
+            --header-bg: #020617;
+            --text-light: #f1f5f9;
+            --text-medium: #94a3b8;
+            --error: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --border: #334155;
+
+            --transition: all 0.3s ease;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Poppins, sans-serif;
+            font-family: "Poppins", sans-serif;
         }
 
         body {
+            background: var(--background);
+            color: var(--text-light);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .video-header {
+            background: var(--header-bg);
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            box-shadow: var(--shadow);
+            height: 70px;
+            flex-shrink: 0;
+        }
+
+        .video-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .video-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        .video-header-logo i {
+            color: var(--secondary);
+            font-size: 1.3rem;
+        }
+
+        .video-header-info {
+            padding-left: 1rem;
+            border-left: 2px solid var(--border);
+        }
+
+        .video-header-info h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .video-header-info p {
+            font-size: 0.85rem;
+            color: var(--text-medium);
+        }
+
+        .video-header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Main Video Container */
+        .video-container {
+            flex: 1;
+            position: relative;
             background: #000;
             overflow: hidden;
-        }
-
-        /* ================= VIDEO ================= */
-        #remoteVideo {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            background: #000;
-        }
-
-        #localVideo {
-            position: fixed;
-            bottom: 110px;
-            right: 20px;
-            width: 200px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2px solid #38bdf8;
-            background: #000;
-            z-index: 10;
-        }
-
-        /* ================= CONTROLS ================= */
-        .controls {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
-            gap: 14px;
-            z-index: 10;
+            align-items: center;
+            justify-content: center;
         }
 
-        .controls button {
-            padding: 12px 18px;
-            border-radius: 50px;
+        /* Remote Video (Doctor) */
+        #remoteVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        /* Local Video (Picture-in-Picture) */
+        #localVideo {
+            position: absolute;
+            bottom: 120px;
+            right: 20px;
+            width: 240px;
+            height: 180px;
+            border-radius: var(--radius);
+            border: 3px solid var(--primary);
+            object-fit: cover;
+            background: #000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            transition: var(--transition);
+        }
+
+        #localVideo:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Call Info Overlay */
+        .call-info-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+            z-index: 20;
+            max-width: 300px;
+        }
+
+        .call-info-overlay h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-light);
+        }
+
+        .call-info-overlay p {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+        }
+
+        /* Controls Bar */
+        .controls-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 50;
+            border-top: 1px solid var(--border);
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .control-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
             border: none;
+            background: var(--card-bg);
+            color: var(--text-light);
+            font-size: 1.2rem;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .control-btn.active {
+            background: var(--primary);
             color: white;
         }
 
-        /* ================= CHAT ================= */
-        .chat-panel {
-            position: fixed;
-            right: -320px;
-            top: 0;
-            width: 320px;
-            height: 100vh;
-            background: #020617;
-            transition: 0.3s;
-            z-index: 20;
+        .control-btn.disabled {
+            background: var(--border);
+            color: var(--text-medium);
+            cursor: not-allowed;
+        }
+
+        .control-btn.disabled:hover {
+            transform: none;
+            background: var(--border);
+            box-shadow: none;
+        }
+
+        .control-label {
+            position: absolute;
+            bottom: -20px;
+            font-size: 0.75rem;
+            color: var(--text-medium);
+            white-space: nowrap;
+            text-align: center;
+            width: 100%;
+        }
+
+        .control-group {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            position: absolute;
+            right: -350px;
+            top: 70px;
+            bottom: 100px;
+            width: 350px;
+            background: var(--header-bg);
+            transition: right 0.3s ease;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
         }
 
         .chat-panel.open {
@@ -85,72 +265,530 @@
         }
 
         .chat-header {
-            padding: 1rem;
-            border-bottom: 1px solid #1e293b;
-            color: #38bdf8;
-            font-weight: 600;
+            padding: 1.2rem;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header h3 {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: var(--text-medium);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .close-chat:hover {
+            background: var(--border);
+            color: var(--text-light);
         }
 
         .chat-messages {
             flex: 1;
-            padding: 1rem;
+            padding: 1.2rem;
             overflow-y: auto;
-            font-size: 14px;
-            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--background);
         }
 
-        .chat-messages div {
-            margin-bottom: 8px;
+        .message {
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.received {
+            align-self: flex-start;
+            background: var(--card-bg);
+            color: var(--text-light);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        .chat-input-container {
+            padding: 1.2rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.8rem;
         }
 
         .chat-input {
-            display: flex;
-            padding: 0.8rem;
-            gap: 6px;
-        }
-
-        .chat-input input {
             flex: 1;
-            padding: 8px;
-            border-radius: 6px;
-            border: none;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            background: var(--background);
+            color: var(--text-light);
+            font-size: 0.95rem;
+            transition: var(--transition);
         }
 
-        .chat-input button {
-            background: #38bdf8;
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-weight: 600;
+            background: var(--primary);
+            color: white;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .send-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            z-index: 20;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Timer */
+        .call-timer {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            z-index: 20;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .chat-panel {
+                width: 300px;
+                right: -300px;
+            }
+
+            #localVideo {
+                width: 200px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .video-header {
+                padding: 0.8rem 1rem;
+            }
+
+            .video-header-logo span {
+                display: none;
+            }
+
+            .video-header-info h2 {
+                font-size: 0.9rem;
+            }
+
+            #localVideo {
+                width: 160px;
+                height: 120px;
+                bottom: 100px;
+                right: 10px;
+            }
+
+            .controls-bar {
+                padding: 1rem;
+                gap: 1rem;
+                height: 90px;
+            }
+
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.1rem;
+            }
+
+            .chat-panel {
+                width: 280px;
+                right: -280px;
+            }
+
+            .call-info-overlay {
+                max-width: 250px;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-header-info {
+                display: none;
+            }
+
+            #localVideo {
+                width: 120px;
+                height: 90px;
+                bottom: 90px;
+            }
+
+            .controls-bar {
+                gap: 0.5rem;
+                padding: 0.8rem;
+            }
+
+            .control-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1rem;
+            }
+
+            .chat-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .call-info-overlay {
+                display: none;
+            }
+        }
+
+        /* No Video State */
+        .no-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem;
+            z-index: 5;
+        }
+
+        .no-video-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .no-video-overlay h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-video-overlay p {
+            color: var(--text-medium);
+            max-width: 400px;
+            line-height: 1.6;
+        }
+    </style>
+    <style>
+        /* Simple Footer */
+        .simple-footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 5%;
+            text-align: center;
+            margin-top: auto;
+        }
+    
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+    
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+    
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+    
+        .footer-logo i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+    
+        .copyright {
+            color: var(--text-medium);
+            font-size: 0.9rem;
+        }
+    
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+    
+        .footer-links a {
+            color: var(--text-medium);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+    
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+    
+        .footer-links .separator {
+            color: var(--border);
+        }
+    
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .simple-footer {
+                padding: 1rem 5%;
+            }
+    
+            .footer-content {
+                flex-direction: column;
+                gap: 0.8rem;
+                text-align: center;
+            }
+    
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+    
+            .separator {
+                display: none;
+            }
+    
+            .footer-links a {
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- VIDEOS -->
-    <video id="remoteVideo" autoplay playsinline></video>
-    <video id="localVideo" autoplay muted playsinline></video>
-
-    <!-- CONTROLS -->
-    <div class="controls">
-        <button id="toggleMic">Mic</button>
-        <button id="toggleCam">Cam</button>
-        <button id="chatToggle">Chat</button>
-    </div>
-
-    <!-- CHAT PANEL -->
-    <div class="chat-panel" id="chatPanel">
-        <div class="chat-header">Consultation Chat</div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input">
-            <input id="chatInput" placeholder="Type a message..." />
-            <button onclick="sendMessage()">Send</button>
+    <!-- Header -->
+    <header class="video-header">
+        <div class="video-header-left">
+            <a href="/user_home" class="video-header-logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>TeleHealth</span>
+            </a>
+            <div class="video-header-info">
+                <h2>Video Consultation</h2>
+                <p>Live with Doctor</p>
+            </div>
         </div>
-    </div>
+        <div class="video-header-right">
+            <div class="call-timer" id="callTimer">00:00:00</div>
+        </div>
+    </header>
 
-    <!-- SOCKET -->
+    <!-- Main Video Container -->
+    <main class="video-container">
+        <!-- No Video Overlay (shown initially) -->
+        <div class="no-video-overlay" id="noVideoOverlay">
+            <div class="no-video-icon">
+                <i class="fas fa-video"></i>
+            </div>
+            <h2>Connecting to Doctor...</h2>
+            <p>Please wait while we connect you with your healthcare provider. Make sure your camera and microphone are
+                enabled.</p>
+        </div>
+
+        <!-- Remote Video (Doctor) -->
+        <video id="remoteVideo" autoplay playsinline></video>
+
+        <!-- Local Video (User) -->
+        <video id="localVideo" autoplay muted playsinline></video>
+
+        <!-- Call Info -->
+        <div class="call-info-overlay">
+            <h3>Virtual Consultation</h3>
+            <p>Consultation ID: <span id="roomId">
+                    <%= roomId %>
+                </span></p>
+        </div>
+
+        <!-- Connection Status -->
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>Connected</span>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="controls-bar">
+            <div class="control-group">
+                <button class="control-btn" id="toggleMic">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <span class="control-label" id="micLabel">Mute</span>
+            </div>
+
+            <div class="control-group">
+                <button class="control-btn" id="toggleCam">
+                    <i class="fas fa-video"></i>
+                </button>
+                <span class="control-label" id="camLabel">Stop Video</span>
+            </div>
+
+            <div class="control-group">
+                <button class="control-btn" id="chatToggle">
+                    <i class="fas fa-comment"></i>
+                </button>
+                <span class="control-label">Chat</span>
+            </div>
+
+            <div class="control-group">
+                <button class="control-btn" id="helpBtn">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+                <span class="control-label">Help</span>
+            </div>
+        </div>
+
+        <!-- Chat Panel -->
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <h3><i class="fas fa-comments"></i> Consultation Chat</h3>
+                <button class="close-chat" id="closeChat">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message received">
+                    <div>System: Consultation has started. You can now chat with your doctor.</div>
+                    <span class="message-time">Just now</span>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." />
+                <button class="send-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+    <footer class="simple-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="/user_home" class="footer-logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>TeleHealth</span>
+                </a>
+                <div class="copyright">
+                    © 2025 TeleHealth. All rights reserved.
+                </div>
+            </div>
+    
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <span class="separator">|</span>
+                <a href="/terms">Terms of Service</a>
+                <span class="separator">|</span>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </footer>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
@@ -158,38 +796,82 @@
 
         let pc, localStream;
         let micOn = true, camOn = true;
+        let callStartTime = Date.now();
+        let timerInterval;
 
-        const localVideo = document.getElementById("localVideo");
-        const remoteVideo = document.getElementById("remoteVideo");
+        // DOM Elements
         const chatPanel = document.getElementById("chatPanel");
+        const chatToggle = document.getElementById("chatToggle");
+        const closeChat = document.getElementById("closeChat");
+        const noVideoOverlay = document.getElementById("noVideoOverlay");
+        const callTimer = document.getElementById("callTimer");
 
-        document.getElementById("chatToggle").onclick = () => {
-            chatPanel.classList.toggle("open");
-        };
+        // Initialize timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const elapsed = Date.now() - callStartTime;
+                const hours = Math.floor(elapsed / 3600000);
+                const minutes = Math.floor((elapsed % 3600000) / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
 
-        const config = {
-            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-        };
-
-        async function init() {
-            localStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true
-            });
-
-            localVideo.srcObject = localStream;
-            socket.emit("join-room", ROOM_ID);
+                callTimer.textContent =
+                    `${hours.toString().padStart(2, '0')}:` +
+                    `${minutes.toString().padStart(2, '0')}:` +
+                    `${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
         }
 
+        // Toggle chat panel
+        chatToggle.onclick = () => {
+            chatPanel.classList.toggle("open");
+            chatToggle.classList.toggle("active");
+        };
+
+        closeChat.onclick = () => {
+            chatPanel.classList.remove("open");
+            chatToggle.classList.remove("active");
+        };
+
+        // Help button
+        document.getElementById("helpBtn").onclick = () => {
+            alert("For technical assistance:\n\n• Ensure your camera and microphone are enabled\n• Check your internet connection\n• Refresh the page if connection is lost\n• Contact support if issues persist");
+        };
+
+        // Initialize video call
+        async function init() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+
+                localVideo.srcObject = localStream;
+                socket.emit("join-room", ROOM_ID);
+
+                // Hide no video overlay
+                noVideoOverlay.style.display = 'none';
+
+                // Start timer
+                startTimer();
+            } catch (error) {
+                console.error("Error accessing media devices:", error);
+                alert("Unable to access camera or microphone. Please check permissions and try again.");
+            }
+        }
+
+        // Create peer connection
         function createPeer() {
+            const config = {
+                iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+            };
+
             pc = new RTCPeerConnection(config);
 
-            localStream.getTracks().forEach(track =>
-                pc.addTrack(track, localStream)
-            );
+            localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
 
             pc.ontrack = e => {
                 remoteVideo.srcObject = e.streams[0];
+                noVideoOverlay.style.display = 'none';
             };
 
             pc.onicecandidate = e => {
@@ -202,6 +884,7 @@
             };
         }
 
+        // User joined event (doctor joins)
         socket.on("user-joined", async () => {
             createPeer();
             const offer = await pc.createOffer();
@@ -213,17 +896,64 @@
             });
         });
 
+        // Toggle microphone
+        document.getElementById("toggleMic").onclick = () => {
+            if (!localStream) return;
+
+            localStream.getAudioTracks().forEach(track => {
+                track.enabled = !track.enabled;
+                micOn = track.enabled;
+            });
+
+            const micBtn = document.getElementById("toggleMic");
+            const micLabel = document.getElementById("micLabel");
+
+            if (micOn) {
+                micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                micBtn.classList.remove("active");
+                micLabel.textContent = "Mute";
+            } else {
+                micBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                micBtn.classList.add("active");
+                micLabel.textContent = "Unmute";
+            }
+        };
+
+        // Toggle camera
+        document.getElementById("toggleCam").onclick = () => {
+            if (!localStream) return;
+
+            localStream.getVideoTracks().forEach(track => {
+                track.enabled = !track.enabled;
+                camOn = track.enabled;
+            });
+
+            const camBtn = document.getElementById("toggleCam");
+            const camLabel = document.getElementById("camLabel");
+
+            if (camOn) {
+                camBtn.innerHTML = '<i class="fas fa-video"></i>';
+                camBtn.classList.remove("active");
+                camLabel.textContent = "Stop Video";
+            } else {
+                camBtn.innerHTML = '<i class="fas fa-video-slash"></i>';
+                camBtn.classList.add("active");
+                camLabel.textContent = "Start Video";
+            }
+        };
+
+        // Handle signaling
         socket.on("signal", async payload => {
             if (!pc) createPeer();
 
             if (payload.offer) {
                 await pc.setRemoteDescription(payload.offer);
-                const answer = await pc.createAnswer();
-                await pc.setLocalDescription(answer);
+                const ans = await pc.createAnswer();
+                await pc.setLocalDescription(ans);
 
                 socket.emit("signal", {
                     roomId: ROOM_ID,
-                    payload: { answer }
+                    payload: { answer: ans }
                 });
             }
 
@@ -236,69 +966,85 @@
             }
         });
 
-        /* ================= CONTROLS ================= */
-    document.getElementById("toggleMic").onclick = () => {
-        if (!localStream) return;
-
-        localStream.getAudioTracks().forEach(track => {
-            track.enabled = !track.enabled;
-            micOn = track.enabled;
-        });
-
-        document.getElementById("toggleMic").innerText =
-            micOn ? "Mic" : "Mic Off";
-    };
-
-    document.getElementById("toggleCam").onclick = () => {
-        if (!localStream) return;
-
-        localStream.getVideoTracks().forEach(track => {
-            track.enabled = !track.enabled;
-            camOn = track.enabled;
-        });
-
-        document.getElementById("toggleCam").innerText =
-            camOn ? "Cam" : "Cam Off";
-    };
-
-
-        /* ================= CHAT ================= */
+        // Chat functionality
         function sendMessage() {
             const input = document.getElementById("chatInput");
             if (!input.value.trim()) return;
 
+            const message = input.value;
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Add to chat UI
+            addMessageToUI(message, "You", time, "sent");
+
+            // Send via socket
             socket.emit("chat-message", {
                 roomId: ROOM_ID,
-                message: input.value,
-                sender: "User"
+                message: message,
+                sender: "User",
+                time: time
             });
 
             input.value = "";
+            input.focus();
         }
 
+        function addMessageToUI(message, sender, time, type) {
+            const chatMessages = document.getElementById("chatMessages");
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `
+                <div>${message}</div>
+                <span class="message-time">${sender} • ${time}</span>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Receive chat messages
         socket.on("chat-message", data => {
-            const msg = document.createElement("div");
-            msg.innerText = `[${data.time}] ${data.sender}: ${data.message}`;
-            document.getElementById("chatMessages").appendChild(msg);
+            addMessageToUI(data.message, data.sender, data.time, "received");
         });
 
-        /* ================= CALL END ================= */
+        // Handle call ended by doctor
         socket.on("call-ended", () => {
-            cleanup();
-            alert("Doctor ended the call");
+            clearInterval(timerInterval);
+            alert("The consultation has ended. Thank you for using TeleHealth.");
             window.location.href = "/user_video_dashboard";
         });
 
+        // Handle connection errors
+        socket.on("connect_error", (error) => {
+            console.error("Connection error:", error);
+            alert("Connection error. Please check your internet connection.");
+        });
+
+        // Cleanup function
         function cleanup() {
-            if (pc) pc.close();
-            if (localStream) localStream.getTracks().forEach(t => t.stop());
-            localVideo.srcObject = null;
-            remoteVideo.srcObject = null;
+            if (pc) {
+                pc.close();
+                pc = null;
+            }
+
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+
+            const localVideo = document.getElementById("localVideo");
+            const remoteVideo = document.getElementById("remoteVideo");
+
+            if (localVideo) localVideo.srcObject = null;
+            if (remoteVideo) remoteVideo.srcObject = null;
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
         }
 
-        init();
+        // Initialize
+        window.addEventListener('DOMContentLoaded', init);
     </script>
-
 </body>
 
 </html>

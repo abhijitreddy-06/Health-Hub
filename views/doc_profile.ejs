@@ -527,7 +527,98 @@
             opacity: 0.9;
         }
     </style>
+<style>
+    /* Simple Footer */
+    .simple-footer {
+        background-color: var(--card-bg);
+        border-top: 1px solid var(--border);
+        padding: 1.5rem 5%;
+        text-align: center;
+        margin-top: auto;
+    }
 
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .footer-left {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .footer-logo i {
+        color: var(--secondary);
+        font-size: 1.2rem;
+    }
+
+    .copyright {
+        color: var(--text-medium);
+        font-size: 0.9rem;
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .footer-links a {
+        color: var(--text-medium);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+        color: var(--primary);
+    }
+
+    .footer-links .separator {
+        color: var(--border);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .simple-footer {
+            padding: 1rem 5%;
+        }
+
+        .footer-content {
+            flex-direction: column;
+            gap: 0.8rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .separator {
+            display: none;
+        }
+
+        .footer-links a {
+            font-size: 0.85rem;
+        }
+    }
+</style>
 </head>
 
 <body>
@@ -641,7 +732,27 @@
 
         </div>
     </section>
-
+    <footer class="simple-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <a href="/user_home" class="footer-logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>TeleHealth</span>
+                </a>
+                <div class="copyright">
+                    © 2025 TeleHealth. All rights reserved.
+                </div>
+            </div>
+    
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <span class="separator">|</span>
+                <a href="/terms">Terms of Service</a>
+                <span class="separator">|</span>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </footer>
     <script>
         // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');

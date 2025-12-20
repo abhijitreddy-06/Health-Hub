@@ -9,6 +9,190 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="/css/user_home.css" rel="stylesheet">
+    <style>
+        /* Simple Footer */
+        .simple-footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 5%;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .footer-logo i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .copyright {
+            color: var(--text-medium);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: var(--text-medium);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-links .separator {
+            color: var(--border);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .simple-footer {
+                padding: 1rem 5%;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 0.8rem;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .separator {
+                display: none;
+            }
+
+            .footer-links a {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <style>
+        /* Simple Footer */
+        .simple-footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 5%;
+            text-align: center;
+            margin-top: auto;
+        }
+    
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+    
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+    
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+    
+        .footer-logo i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+    
+        .copyright {
+            color: var(--text-medium);
+            font-size: 0.9rem;
+        }
+    
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+    
+        .footer-links a {
+            color: var(--text-medium);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+    
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+    
+        .footer-links .separator {
+            color: var(--border);
+        }
+    
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .simple-footer {
+                padding: 1rem 5%;
+            }
+    
+            .footer-content {
+                flex-direction: column;
+                gap: 0.8rem;
+                text-align: center;
+            }
+    
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+    
+            .separator {
+                display: none;
+            }
+    
+            .footer-links a {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -52,8 +236,7 @@
         <a href="/user_video_dashboard"><i class="fas fa-lock"></i> video</a>
         <a href="/appointments"><i class="fas fa-chevron-right"></i> Appointments</a>
         <a href="/"><i class="fas fa-comments"></i> Messages</a>
-    <a href="/user_profile"><i class="fas fa-user-circle"></i> Profile</a>
-
+        <a href="/user_profile"><i class="fas fa-user-circle"></i> Profile</a>
     </div>
 
     <!-- Hero Section -->
@@ -63,8 +246,10 @@
             <p>Access top healthcare professionals from the comfort of your home. Anytime, anywhere. TeleHealth makes
                 healthcare accessible, affordable, and convenient.</p>
             <div class="hero-buttons">
-                <a href="#" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Book Appointment</a>
-                <a href="#" class="btn btn-outline"><i class="fas fa-video"></i> Video Consultation</a>
+                <a href="/appointments" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Book
+                    Appointment</a>
+                <a href="/user_video_dashboard" class="btn btn-outline"><i class="fas fa-video"></i> Video
+                    Consultation</a>
             </div>
         </div>
         <div class="hero-image">
@@ -137,7 +322,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="btn btn-primary"><i class="fas fa-calendar-plus"></i> Schedule Now</a>
+                <a href="/appointments" class="btn btn-primary"><i class="fas fa-calendar-plus"></i> Schedule Now</a>
             </div>
             <div class="appointment-image">
                 <img src="https://images.unsplash.com/photo-1584432810601-6c7f27d2362b?auto=format&fit=crop&w=600&h=400"
@@ -178,58 +363,25 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
+    <!-- Simple Footer -->
+    <footer class="simple-footer">
         <div class="footer-content">
-            <div class="footer-about">
-                <div class="footer-logo">
+            <div class="footer-left">
+                <a href="/user_home" class="footer-logo">
                     <i class="fas fa-heartbeat"></i>
-                    <span class="logo-text">TeleHealth</span>
+                    <span>TeleHealth</span>
+                </a>
+                <div class="copyright">
+                    © 2025 TeleHealth. All rights reserved.
                 </div>
-                <p>Providing accessible and quality healthcare services through innovative telehealth solutions for
-                    patients worldwide.</p>
             </div>
 
             <div class="footer-links">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="/"><i class="fas fa-chevron-right"></i> Home</a></li>
-                    <li><a href="/services"><i class="fas fa-chevron-right"></i> Services</a></li>
-                    <li><a href="/user_doctors"><i class="fas fa-chevron-right"></i> Doctors</a></li>
-                    <li><a href="/appointments"><i class="fas fa-chevron-right"></i> Appointments</a></li>
-                    <li><a href="/contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-links">
-                <h3>Our Services</h3>
-                <ul>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Video Consultations</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Remote Monitoring</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> E-Prescriptions</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Health Records</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right"></i> Mental Health</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-links">
-                <h3>Contact Us</h3>
-                <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Healthcare St, MedCity</li>
-                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
-                    <li><i class="fas fa-envelope"></i> support@telehealth.com</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="copyright">
-                &copy; 2023 TeleHealth. All rights reserved.
-            </div>
-            <div class="footer-bottom-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Cookies</a>
+                <a href="/privacy">Privacy Policy</a>
+                <span class="separator">|</span>
+                <a href="/terms">Terms of Service</a>
+                <span class="separator">|</span>
+                <a href="/contact">Contact</a>
             </div>
         </div>
     </footer>
