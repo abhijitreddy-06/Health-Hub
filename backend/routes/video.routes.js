@@ -8,12 +8,30 @@ export default function videoRoutes(app) {
         "/user_video/:roomId",
         authenticate,
         authorize("user"),
-        (req, res) => {
+        async (req, res) => {
+
+            const result = await db.query(
+                `
+            SELECT id
+            FROM appointments
+            WHERE room_id = $1
+              AND user_id = $2
+              AND status = 'started'
+            `,
+                [req.params.roomId, req.user.id]
+            );
+
+            if (!result.rows.length) {
+                return res.send("Invalid or expired video session");
+            }
+
             res.render("user_video", {
-                roomId: req.params.roomId
+                roomId: req.params.roomId,
+                appointmentId: result.rows[0].id   // ✅ PASS THIS
             });
         }
     );
+
 
     app.get(
         "/doc_video/:roomId",

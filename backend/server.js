@@ -14,8 +14,9 @@ import protectedRoutes from "./routes/protected.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
 import appointmentRoutes from "./routes/appointment.routes.js";
 import videoDashboardRoutes from "./routes/videoDashboard.routes.js";
-
-
+import vaultRoutes from "./routes/vault.routes.js";
+import notesRoutes from "./routes/notes.routes.js";
+import prescriptionRoutes from "./routes/prescription.routes.js";
 
 const app = express();
 const port = 3000;
@@ -36,6 +37,9 @@ app.use((req, res, next) => {
 });
 
 app.use("/uploads", express.static(path.join(PROJECT_ROOT, "uploads")));
+vaultRoutes(app);
+notesRoutes(app);
+app.use(prescriptionRoutes);
 
 publicRoutes(app, PROJECT_ROOT);
 authRoutes(app);

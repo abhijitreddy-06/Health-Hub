@@ -14,7 +14,6 @@ export default function authenticate(req, res, next) {
             role: payload.role,
             phone: payload.phone
         };
-        console.log("JWT payload:", payload);
         next();
     } catch (err) {
         res.clearCookie("token");

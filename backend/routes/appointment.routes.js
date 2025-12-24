@@ -75,8 +75,11 @@ export default function appointmentRoutes(app) {
                     p.specialization
                 FROM appointments a
                 JOIN doc_profile p ON p.doc_id = a.doctor_id
-                WHERE a.user_id = $1
-                ORDER BY a.appointment_date, a.appointment_time
+WHERE a.user_id = $1
+AND a.status != 'completed'
+ORDER BY a.appointment_date, a.appointment_time
+LIMIT 1
+
                 `,
                 [req.user.id]
             );
@@ -127,30 +130,31 @@ export default function appointmentRoutes(app) {
             try {
                 const result = await db.query(
                     `
-                SELECT 
-                    a.id,
-                    a.appointment_date,
-                    a.appointment_time,
-                    a.status,
-                    a.room_id,
-                    up.full_name AS user_name,
-                    u.phone AS user_phone
-                FROM appointments a
-                JOIN login u ON u.id = a.user_id
-                JOIN user_profile up ON up.user_id = u.id
-                WHERE a.doctor_id = $1
-                ORDER BY a.appointment_date, a.appointment_time
-                `,
+        SELECT 
+          a.id,
+          a.appointment_date,
+          a.appointment_time,
+          a.status,
+          a.room_id,
+          up.full_name AS user_name
+        FROM appointments a
+        JOIN user_profile up ON up.user_id = a.user_id
+        WHERE a.doctor_id = $1
+          AND a.status IN ('scheduled','started')
+        ORDER BY a.appointment_date, a.appointment_time
+        LIMIT 1
+        `,
                     [req.user.id]
                 );
 
                 res.json(result.rows);
             } catch (err) {
-                console.error("Doctor appointments error:", err);
-                res.status(500).json({ error: "Failed to fetch appointments" });
+                console.error(err);
+                res.status(500).json({ error: "Failed to load appointment" });
             }
         }
     );
+
 
 
     /* ===============================
