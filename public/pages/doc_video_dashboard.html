@@ -957,6 +957,7 @@
                             <p>Summarize the consultation and provide follow-up instructions</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -1080,6 +1081,11 @@
                     startBtn.className = "btn btn-completed";
                     startBtn.onclick = null;
                 }
+                const sendBtn = document.getElementById("sendPrescriptionBtn");
+
+                if (appt.status === "completed") {
+                    sendBtn.style.display = "inline-flex";
+                }
 
             } catch (err) {
                 console.error(err);
@@ -1089,6 +1095,7 @@
                 `;
             }
         }
+     
 
         async function startCall() {
             if (!appointmentId) return;

@@ -1,29 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Your Profile | TeleHealth</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    </head>
+    <title>My Records</title>
+</head>
 
 <body>
-<form action="/uploads" method="post" enctype="multipart/form-data">
-    <input type="file" name="vaultdatas"/>
-    <button type="submit" >upload</button>
-</form>
 
+    <h2>My Medical Records</h2>
 
+    <button onclick="openUpload()">Upload Record</button>
 
+    <form id="uploadForm" action="/vault/upload" method="POST" enctype="multipart/form-data" style="display:none">
+        <input type="file" name="file" required />
+        <select name="recordType">
+            <option value="general">General</option>
+            <option value="prescription">Prescription</option>
+            <option value="report">Report</option>
+        </select>
+        <button type="submit">Upload</button>
+    </form>
 
+    <ul id="records"></ul>
 
+    <script>
+        async function loadRecords() {
+            const res = await fetch("/api/vault/user");
+            const data = await res.json();
 
+            const list = document.getElementById("records");
+            list.innerHTML = "";
 
+            data.forEach(r => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+            ${r.file_name} (${r.record_type})
+            <a href="/vault/file/${r.id}">Download</a>
+        `;
+                list.appendChild(li);
+            });
+        }
 
+        function openUpload() {
+            document.getElementById("uploadForm").style.display = "block";
+        }
 
+        loadRecords();
+    </script>
 
 </body>
 
