@@ -11,6 +11,9 @@ __pycache__/
 *.pkl
 *.pyc
 *.ipynb_checkpoints
+# ML models (too large for GitHub)
+*.keras
+medical-ai/training/training/saved_model/
 
 # Python virtual environment (adjust if yours has a different name)
 venv/
