@@ -725,9 +725,7 @@
 
 
 
-                <a href="/records" class="btn btn-outline">
-                    <i class="fas fa-calendar-check"></i> My Records
-                </a>
+                
             </div>
 
         </div>
@@ -754,12 +752,12 @@
         </div>
     </footer>
     <script>
-        // Theme Toggle
+
         const themeToggle = document.getElementById('themeToggle');
         const mobileThemeToggle = document.getElementById('mobileThemeToggle');
         const html = document.documentElement;
 
-        // Check for saved theme preference or respect OS preference
+
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         if (savedTheme) {
             html.setAttribute('data-theme', savedTheme);
@@ -784,7 +782,7 @@
         themeToggle.addEventListener('click', toggleTheme);
         mobileThemeToggle.addEventListener('click', toggleTheme);
 
-        // Mobile Menu
+
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const closeMenuBtn = document.getElementById('closeMenu');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -800,7 +798,7 @@
             document.body.style.overflow = '';
         });
 
-        // Close menu when clicking outside
+
         document.addEventListener('click', (e) => {
             if (mobileMenu.classList.contains('active') &&
                 !mobileMenu.contains(e.target) &&

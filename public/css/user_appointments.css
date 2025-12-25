@@ -1,40 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeleHealth - Your Profile</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <style>
         :root {
-            /* Color Variables */
             --primary: #38bdf8;
             --primary-hover: #0ea5e9;
             --secondary: #10b981;
             --background: #f9fafb;
-            --dark-bg: #1e293b;
             --card-bg: #ffffff;
             --text-dark: #0f172a;
             --text-light: #f1f5f9;
             --text-medium: #475569;
             --border: #e2e8f0;
             --error: #ef4444;
+            --success: #22c55e;
             --warning: #f59e0b;
-            --info: #60a5fa;
             --disabled: #9ca3af;
             --footer-bg: #1e293b;
+            --calendar-bg: #ffffff;
+            --calendar-hover: #f1f5f9;
+            --calendar-selected: #38bdf8;
+            --calendar-today: #dbeafe;
 
-            /* Other Variables */
             --transition: all 0.3s ease;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --radius: 12px;
         }
 
-        /* Dark Theme Variables */
         [data-theme="dark"] {
             --background: #1e293b;
             --card-bg: #334155;
@@ -43,13 +32,17 @@
             --text-medium: #cbd5e1;
             --border: #475569;
             --footer-bg: #0f172a;
+            --calendar-bg: #334155;
+            --calendar-hover: #475569;
+            --calendar-selected: #0ea5e9;
+            --calendar-today: #1e40af;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Poppins", "Inter", "Roboto", sans-serif;
+            font-family: "Poppins", sans-serif;
         }
 
         body {
@@ -88,9 +81,6 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
-            font-family: "Poppins", sans-serif;
-            font-weight: 700;
-            letter-spacing: -0.5px;
         }
 
         .logo i {
@@ -103,7 +93,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            -webkit-text-fill-color: transparent;
             font-weight: 800;
         }
 
@@ -135,37 +124,6 @@
             background-color: rgba(56, 189, 248, 0.1);
         }
 
-        .btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(56, 189, 248, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
         .theme-toggle {
             background: none;
             border: none;
@@ -186,7 +144,7 @@
             background-color: rgba(56, 189, 248, 0.1);
         }
 
-        /* Mobile Menu */
+        /* Mobile Controls */
         .mobile-controls {
             display: none;
             align-items: center;
@@ -267,87 +225,371 @@
             color: var(--primary);
         }
 
-        .mobile-menu .btn-outline {
-            width: 100%;
-            text-align: center;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-
-        /* Profile Section */
-        .profile-section {
+        /* Main Content */
+        main {
             flex: 1;
             padding: 3rem 5%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             width: 100%;
         }
 
-        .profile-header {
+        .page-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
-        .profile-header h1 {
+        .page-header h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--text-dark);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .profile-header p {
+        .page-header p {
             color: var(--text-medium);
-            max-width: 600px;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .booking-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .profile-card {
+        /* Calendar Styling */
+        .calendar-card {
             background-color: var(--card-bg);
+            padding: 2rem;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 2.5rem;
-            max-width: 900px;
-            margin: 0 auto;
+            transition: var(--transition);
         }
 
-        .profile-grid {
+        .calendar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .calendar-header h2 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .month-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .month-nav button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .month-nav button:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+        }
+
+        .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .day-header {
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-medium);
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+
+        .calendar-day:hover:not(.empty):not(.disabled) {
+            background-color: var(--calendar-hover);
+        }
+
+        .calendar-day.selected {
+            background-color: var(--calendar-selected);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .calendar-day.today {
+            background-color: var(--calendar-today);
+            border-color: var(--primary);
+        }
+
+        .calendar-day.disabled {
+            color: var(--disabled);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .calendar-day.empty {
+            visibility: hidden;
+        }
+
+        .calendar-day.weekend {
+            color: var(--warning);
+        }
+
+        .calendar-day.past {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Time Slots */
+        .time-slots-container {
+            margin-top: 1.5rem;
+        }
+
+        .time-slots-container h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .time-slot {
+            padding: 0.6rem 0.5rem;
+            text-align: center;
+            border-radius: 8px;
+            background-color: var(--background);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .time-slot:hover:not(.disabled) {
+            border-color: var(--primary);
+            background-color: rgba(56, 189, 248, 0.1);
+        }
+
+        .time-slot.selected {
+            background-color: var(--calendar-selected);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .time-slot.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--disabled);
+        }
+
+        /* Form Styling */
+        .form-card {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+        }
+
+        .appointment-form {
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
         }
 
-        .profile-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-item label {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-medium);
-            margin-bottom: 0.4rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .profile-item .value {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-dark);
-            padding: 0.8rem 1rem;
-            background-color: rgba(56, 189, 248, 0.05);
-            border-radius: 8px;
-            border-left: 3px solid var(--primary);
-        }
-
-        .profile-actions {
+        .form-group {
             display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group label i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            padding: 0.9rem 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2rem;
+            padding-right: 3rem;
+        }
+
+        .selected-info {
+            background-color: rgba(56, 189, 248, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin-top: 1rem;
+        }
+
+        .selected-info h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .selected-info p {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .selected-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-label {
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 2.5rem;
-            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: var(--disabled);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         /* Footer */
@@ -459,7 +701,13 @@
             color: var(--primary);
         }
 
-        /* Responsive Design */
+        /* Responsive */
+        @media (max-width: 992px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -481,39 +729,51 @@
                 grid-template-columns: 1fr;
             }
 
-            .profile-grid {
+            .booking-container {
                 grid-template-columns: 1fr;
             }
 
-            .profile-actions {
-                flex-direction: column;
-                gap: 0.8rem;
+            .calendar-card,
+            .form-card {
+                padding: 1.5rem;
             }
 
-            .btn {
-                width: 100%;
-                text-align: center;
+            .calendar-grid {
+                gap: 0.3rem;
+            }
+
+            .calendar-day {
+                font-size: 0.9rem;
+            }
+
+            .time-slots-grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
             }
         }
 
         @media (max-width: 576px) {
-            .profile-header h1 {
+            .page-header h1 {
                 font-size: 2rem;
             }
 
-            .profile-card {
-                padding: 1.5rem;
+            .calendar-header h2 {
+                font-size: 1.3rem;
             }
 
-            .btn {
-                padding: 0.6rem 1.2rem;
+            .form-header h2 {
+                font-size: 1.5rem;
             }
 
             .navbar {
                 padding: 1rem 5%;
             }
+
+            main {
+                padding: 2rem 5%;
+            }
         }
 
+        /* Dark theme adjustments */
         [data-theme="dark"] footer {
             color: var(--text-dark);
         }
@@ -523,8 +783,7 @@
             color: var(--text-dark);
             opacity: 0.9;
         }
-    </style>
-    <style>
+
         /* Simple Footer */
         .simple-footer {
             background-color: var(--card-bg);
@@ -615,204 +874,3 @@
                 font-size: 0.85rem;
             }
         }
-    </style>
-</head>
-
-<body>
-    
-    <header>
-        <nav class="navbar">
-            <a href="/user_home" class="logo">
-                <i class="fas fa-heartbeat"></i>
-                <span class="logo-text">TeleHealth</span>
-            </a>
-
-            <div class="nav-links">
-                <a href="/user_home" class="active"><i class="fas fa-home"></i> Home</a>
-                <a href="/predict"><i class="fas fa-robot"></i>AI Pre Advice</a>
-                <a href="/user_video_dashboard"><i class="fas fa-video"></i>video</a>
-                <a href="/appointments"><i class="fas fa-user-md"></i>Appointments</a>
-                <a href="/records"><i class="fas fa-folder"></i> My Records</a>
-                <a href="/user_profile"><i class="fas fa-user-circle"></i> Profile</a>
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
-
-            <div class="mobile-controls">
-                <button class="theme-toggle" id="mobileThemeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
-
-
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="close-menu" id="closeMenu">
-            <i class="fas fa-times"></i>
-        </button>
-                <a href="/user_home" class="active"><i class="fas fa-home"></i> Home</a>
-                <a href="/predict"><i class="fas fa-robot"></i>AI Pre Advice</a>
-                <a href="/user_video_dashboard"><i class="fas fa-video"></i>video</a>
-                <a href="/appointments"><i class="fas fa-user-md"></i>Appointments</a>
-                <a href="/records"><i class="fas fa-folder"></i> My Records</a>
-                <a href="/user_profile"><i class="fas fa-user-circle"></i> Profile</a>
-    </div>
-
-    <!-- Profile Section -->
-    <section class="profile-section">
-        <div class="profile-header">
-            <h1>Your Health Profile</h1>
-            <p>Manage and view your personal health information securely</p>
-        </div>
-
-        <div class="profile-card">
-            <div class="profile-grid">
-                <div class="profile-item">
-                    <label>Full Name</label>
-                    <div class="value">
-                        <%= profile.fullName %>
-                    </div>
-                </div>
-
-                <div class="profile-item">
-                    <label>Date of Birth</label>
-                    <div class="value">
-                        <%= profile.dob %>
-                    </div>
-                </div>
-
-                <div class="profile-item">
-                    <label>Gender</label>
-                    <div class="value">
-                        <% if (profile.gender) { %>
-                            <%= profile.gender %>
-                                <% } else if (profile.customGender) { %>
-                                    <%= profile.customGender %>
-                                        <% } else { %>
-                                            Not specified
-                                            <% } %>
-                    </div>
-                </div>
-
-                <div class="profile-item">
-                    <label>Height</label>
-                    <div class="value">
-                        <%= profile.height %> cm
-                    </div>
-                </div>
-
-                <div class="profile-item">
-                    <label>Weight</label>
-                    <div class="value">
-                        <%= profile.weight %> kg
-                    </div>
-                </div>
-
-                <div class="profile-item">
-                    <label>Blood Group</label>
-                    <div class="value">
-                        <%= profile.bloodGroup || "Not specified" %>
-                    </div>
-                </div>
-
-                <div class="profile-item">
-                    <label>Allergies</label>
-                    <div class="value">
-                        <%= profile.allergies || "None" %>
-                    </div>
-                </div>
-            </div>
-
-            <div class="profile-actions">
-                <a href="/logout" class="btn btn-primary"><i class="fas fa-edit"></i>Log out</a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="simple-footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <a href="/user_home" class="footer-logo">
-                    <i class="fas fa-heartbeat"></i>
-                    <span>TeleHealth</span>
-                    </a>
-                    <div class="copyright">
-                        © 2025 TeleHealth. All rights reserved.
-                </div>
-            </div>
-
-            <div class="footer-links">
-                <a href="/privacy">Privacy Policy</a>
-                <span class="separator">|</span>
-                <a href="/terms">Terms of Service</a>
-                <span class="separator">|</span>
-                <a href="/contact">Contact</a>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-
-        const themeToggle = document.getElementById('themeToggle');
-        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
-        const html = document.documentElement;
-
-
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        if (savedTheme) {
-            html.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-
-        function toggleTheme() {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
-
-        function updateThemeIcon(theme) {
-            const icon = theme === 'dark' ? 'fa-sun' : 'fa-moon';
-            themeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
-            mobileThemeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
-        }
-
-        themeToggle.addEventListener('click', toggleTheme);
-        mobileThemeToggle.addEventListener('click', toggleTheme);
-
-
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const closeMenuBtn = document.getElementById('closeMenu');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        mobileMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            mobileMenu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-
-
-        document.addEventListener('click', (e) => {
-            if (mobileMenu.classList.contains('active') &&
-                !mobileMenu.contains(e.target) &&
-                e.target !== mobileMenuBtn) {
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-    </script>
-</body>
-
-</html>

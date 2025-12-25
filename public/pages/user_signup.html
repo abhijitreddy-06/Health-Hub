@@ -104,7 +104,7 @@
 </head>
 
 <body>
-    <!-- Header & Navigation -->
+    
     <header>
         <nav class="navbar">
             <a href="/" class="logo">
@@ -133,7 +133,7 @@
         </nav>
     </header>
 
-    <!-- Mobile Menu -->
+
     <div class="mobile-menu" id="mobileMenu">
         <button class="close-menu" id="closeMenu">
             <i class="fas fa-times"></i>
@@ -144,7 +144,7 @@
         <a href="/user_login" class="btn btn-outline"><i class="fas fa-user-plus"></i>Login</a>
     </div>
 
-    <!-- Main Content -->
+    
     <div class="container">
         <div class="login-container">
             <div class="login-form">
@@ -191,15 +191,7 @@
             </div>
         </div>
     </div>
-    <div class="chatbot-container">
-        <div class="chat-bubble" id="chat-bubble">
-            Need help? Chat with our AI assistant!
-        </div>
-        <div class="chatbot" id="chatbot">
-            <i class="fas fa-robot"></i>
-        </div>
-    </div>
-    <!-- Footer -->
+
     <footer class="simple-footer">
         <div class="footer-content">
             <div class="footer-left">
@@ -221,72 +213,8 @@
             </div>
         </div>
     </footer>
+<script src="/js/user_signup.js"></script>
 
-    <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
-        const html = document.documentElement;
-
-        // Check for saved theme preference or respect OS preference
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        if (savedTheme) {
-            html.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-
-        function toggleTheme() {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
-
-        function updateThemeIcon(theme) {
-            const icon = theme === 'dark' ? 'fa-sun' : 'fa-moon';
-            themeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
-            mobileThemeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
-        }
-
-        themeToggle.addEventListener('click', toggleTheme);
-        mobileThemeToggle.addEventListener('click', toggleTheme);
-
-        // Mobile Menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const closeMenuBtn = document.getElementById('closeMenu');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        mobileMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            mobileMenu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (mobileMenu.classList.contains('active') &&
-                !mobileMenu.contains(e.target) &&
-                e.target !== mobileMenuBtn) {
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-
-
-        // Prevent form submission on Enter key in phone field
-        phoneInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-            }
-        });
-    </script>
 </body>
 
 </html>

@@ -9,98 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/css/landing.css">
-    <style>
-        /* Simple Footer */
-        .simple-footer {
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border);
-            padding: 1.5rem 5%;
-            text-align: center;
-            margin-top: auto;
-        }
-    
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-    
-        .footer-left {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-    
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
-        }
-    
-        .footer-logo i {
-            color: var(--secondary);
-            font-size: 1.2rem;
-        }
-    
-        .copyright {
-            color: var(--text-medium);
-            font-size: 0.9rem;
-        }
-    
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-    
-        .footer-links a {
-            color: var(--text-medium);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-    
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-    
-        .footer-links .separator {
-            color: var(--border);
-        }
-    
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .simple-footer {
-                padding: 1rem 5%;
-            }
-    
-            .footer-content {
-                flex-direction: column;
-                gap: 0.8rem;
-                text-align: center;
-            }
-    
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
-    
-            .separator {
-                display: none;
-            }
-    
-            .footer-links a {
-                font-size: 0.85rem;
-            }
-        }
-    </style>
+
 </head>
 
 <body>
@@ -256,15 +165,8 @@
         </div>
     </section>
 
-    <!-- Chatbot -->
-    <div class="chatbot-container">
-        <div class="chat-bubble" id="chat-bubble">
-            Need help? Chat with our AI assistant!
-        </div>
-        <div class="chatbot" id="chatbot">
-            <i class="fas fa-robot"></i>
-        </div>
-    </div>
+
+
 
     <!-- Footer (from login page) -->
     <footer class="simple-footer">
@@ -289,76 +191,7 @@
         </div>
     </footer>
 
-    <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
-        const html = document.documentElement;
-
-        // Check for saved theme preference or respect OS preference
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        if (savedTheme) {
-            html.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-
-        function toggleTheme() {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
-
-        function updateThemeIcon(theme) {
-            const icon = theme === 'dark' ? 'fa-sun' : 'fa-moon';
-            themeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
-            mobileThemeToggle.innerHTML = `<i class="fas ${icon}"></i>`;
-        }
-
-        themeToggle.addEventListener('click', toggleTheme);
-        mobileThemeToggle.addEventListener('click', toggleTheme);
-
-        // Mobile Menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const closeMenuBtn = document.getElementById('closeMenu');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        mobileMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            mobileMenu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (mobileMenu.classList.contains('active') &&
-                !mobileMenu.contains(e.target) &&
-                e.target !== mobileMenuBtn) {
-                mobileMenu.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Chatbot functionality
-        const chatBubble = document.getElementById('chat-bubble');
-        const chatbot = document.getElementById('chatbot');
-
-        // Show chat bubble after 3 seconds
-        setTimeout(() => {
-            chatBubble.classList.add('active');
-        }, 3000);
-
-        chatbot.addEventListener('click', () => {
-            alert('Chatbot feature would open here. This is a frontend demonstration.');
-        });
-    </script>
+  <script src="/js/landing.js"></script>
 </body>
 
 </html>

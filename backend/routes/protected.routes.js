@@ -91,6 +91,16 @@ export default function protectedRoutes(app, PROJECT_ROOT) {
         }
     );
     app.get(
+        "/user_profile_create",
+        authenticate,
+        authorize("user"),
+        (req, res) => {
+            res.sendFile(
+                path.join(PROJECT_ROOT, "public/pages/user_profile.html")
+            );
+        }
+    );
+    app.get(
         "/api/prescription/download/:appointmentId",
         authenticate,
         authorize("user"),
