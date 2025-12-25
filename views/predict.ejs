@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Pre-Consultation | TeleHealth</title>
+
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            background: #0f172a;
+            color: white;
+            padding: 40px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 24px;
+            font-size: 16px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .result {
+            margin-top: 30px;
+            background: #020617;
+            padding: 24px;
+            border-radius: 12px;
+        }
+
+        .condition {
+            margin-bottom: 16px;
+        }
+
+        .bar {
+            background: #1e293b;
+            height: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #38bdf8;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .low {
+            background: #22c55e;
+        }
+
+        .moderate {
+            background: #f59e0b;
+        }
+
+        .critical {
+            background: #ef4444;
+        }
+
+        .section {
+            margin-top: 18px;
+        }
+
+        small {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>🧠 AI Pre-Consultation Check</h2>
+    <p>Describe your symptoms before booking a video call</p>
+
+    <textarea id="symptoms" placeholder="e.g. high fever, headache, body pain for 2 days"></textarea>
+    <br>
+    <button onclick="runPrecheck()">Analyze Symptoms</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        async function runPrecheck() {
+            const text = document.getElementById("symptoms").value.trim();
+            const resultBox = document.getElementById("result");
+
+            if (!text) {
+                resultBox.innerHTML = "⚠️ Please enter your symptoms.";
+                return;
+            }
+
+            resultBox.innerHTML = "🔍 Analyzing symptoms…";
+
+            try {
+                const res = await fetch("/api/ai/precheck", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text })
+                });
+
+                const data = await res.json();
+
+                if (data.error) {
+                    resultBox.innerHTML = `❌ ${data.error}`;
+                    return;
+                }
+
+                let html = `<h3>🩺 Possible Conditions</h3>`;
+
+                data.top_conditions.forEach(c => {
+                    const percent = Math.round(c.confidence * 100);
+                    html += `
+                        <div class="condition">
+                            <b>${c.condition}</b> (${percent}%)
+                            <div class="bar">
+                                <div class="bar-fill" style="width:${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    <div class="section">
+                        <b>Severity:</b>
+                        <span class="badge ${data.severity}">
+                            ${data.severity.toUpperCase()}
+                        </span>
+                    </div>
+
+                    <div class="section">
+                        <b>Recommendation:</b>
+                        <p>${data.recommendation}</p>
+                    </div>
+                `;
+
+                if (data.red_flags && data.red_flags.length) {
+                    html += `
+                        <div class="section">
+                            <b>🚨 Red Flags Detected:</b>
+                            <ul>
+                                ${data.red_flags.map(r => `<li>${r}</li>`).join("")}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <hr>
+                    <small>${data.disclaimer}</small>
+                `;
+
+                resultBox.innerHTML = html;
+
+            } catch (err) {
+                console.error(err);
+                resultBox.innerHTML = "❌ AI service unavailable. Try again later.";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -17,6 +17,7 @@ import videoDashboardRoutes from "./routes/videoDashboard.routes.js";
 import vaultRoutes from "./routes/vault.routes.js";
 import notesRoutes from "./routes/notes.routes.js";
 import prescriptionRoutes from "./routes/prescription.routes.js";
+import aiRoutes from "./routes/ai.routes.js";
 
 const app = express();
 const port = 3000;
@@ -43,6 +44,7 @@ app.use(prescriptionRoutes);
 
 publicRoutes(app, PROJECT_ROOT);
 authRoutes(app);
+aiRoutes(app);
 videoRoutes(app, PROJECT_ROOT);
 protectedRoutes(app, PROJECT_ROOT);
 profileRoutes(app);
